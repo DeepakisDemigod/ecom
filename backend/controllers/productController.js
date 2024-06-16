@@ -1,6 +1,7 @@
 const Product = require('../models/productModel.js');
 const ErrorHandler = require('../utils/errorhandler.js');
 const catchAsyncErrors = require('../middleware/catchAsyncErrors.js');
+const ApiFeatures = require('../utils/apifeatures.js');
 
 // Create Product -- Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
@@ -14,13 +15,42 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 
 // Get All Products
 
+exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
+  try {
+    const keyword = req.query.keyword || '';
+    console.log('Received query parameters:', req.query);
+
+    const apiFeature = new ApiFeatures(Product.find(), { keyword }).search();
+    const products = await apiFeature.query;
+
+    console.log('Found products:', products);
+
+    res.status(200).json({
+      success: true,
+      products
+    });
+  } catch (error) {
+    return next(new ErrorHandler('Cannot read properties of undefined (reading "keyword")', 400));
+  }
+});
+
+
+
+/*
 exports.getAllProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find();
+  console.log('Received query parameters:', req.queryStr);
+
+  const apiFeature = new ApiFeatures(Product.find(), req.query.keyword).search();
+  const products = await apiFeature.query;
+
+  console.log('Found products:', products);
+
   res.status(200).json({
     success: true,
     products
   });
 });
+*/
 
 // get Product Details
 
