@@ -16,25 +16,21 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 // Get All Products
 
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
-  try {
-    const keyword = req.query.keyword || '';
-    console.log('Received query parameters:', req.query);
+  //const keyword = req.query.keyword || '';
+  console.log(req);
 
-    const apiFeature = new ApiFeatures(Product.find(), { keyword }).search();
-    const products = await apiFeature.query;
+  const apiFeature = new ApiFeatures(Product.find(), req.query)
+    .search()
+    .filter();
+  const products = await apiFeature.query;
 
-    console.log('Found products:', products);
+  console.log('Found products:', products);
 
-    res.status(200).json({
-      success: true,
-      products
-    });
-  } catch (error) {
-    return next(new ErrorHandler('Cannot read properties of undefined (reading "keyword")', 400));
-  }
+  res.status(200).json({
+    success: true,
+    products
+  });
 });
-
-
 
 /*
 exports.getAllProducts = catchAsyncErrors(async (req, res) => {

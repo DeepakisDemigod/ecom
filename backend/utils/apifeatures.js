@@ -13,11 +13,21 @@ class ApiFeatures {
           }
         }
       : {};
-      
-    console.log('Search keyword:', this.queryStr.keyword || 'No keyword provided');
-    console.log('Constructed query:', keyword);
 
-    this.query = this.query.find({ ...keyword });
+    this.query = this.query.find({...keyword});
+    return this;
+  }
+
+  filter() {
+    const queryCopy = { ...this.queryStr };
+    console.log(queryCopy);
+    // Remove fields
+    const removeFields = ['keyword', 'page', 'limit'];
+    removeFields.forEach(key => delete queryCopy[key]);
+    console.log(queryCopy);
+    // Issue here: Modify this.query, not this.queryCopy
+    this.query = this.query.find(queryCopy); // Should be this.query = this.query.find(queryCopy);
+
     return this;
   }
 }
