@@ -14,20 +14,32 @@ class ApiFeatures {
         }
       : {};
 
-    this.query = this.query.find({...keyword});
+    this.query = this.query.find({ ...keyword });
     return this;
   }
 
   filter() {
     const queryCopy = { ...this.queryStr };
-    console.log(queryCopy);
+
     // Remove fields
     const removeFields = ['keyword', 'page', 'limit'];
-    removeFields.forEach(key => delete queryCopy[key]);
-    console.log(queryCopy);
-    // Issue here: Modify this.query, not this.queryCopy
-    this.query = this.query.find(queryCopy); // Should be this.query = this.query.find(queryCopy);
 
+    removeFields.forEach(key => delete queryCopy[key]);
+
+    // filter for price and Rating
+    let queryStr = JSON.stringify(queryCopy);
+    queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, key => `$${key}`);
+
+    this.query = this.query.find(JSON.parse(queryStr));
+
+    console.log(queryStr);
+    return this;
+  }
+   
+  pagination(resultPerPage) {
+    const currentPage = Number(this.queryStr.page) || 1; // 50 Products perpage 10 products
+    const skip = resultPerPage * (currentPage - 1);
+    this.query = this.query.limit(resultPerPage).skip(skip);
     return this;
   }
 }
