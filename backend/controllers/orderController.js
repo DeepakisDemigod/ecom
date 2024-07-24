@@ -31,3 +31,11 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
     order
   });
 });
+
+// get single order
+exports.getSingleOrder = catchAsyncErrors(async (req, res, next) => {
+  const order = await Order.findById(req.params.id).populate(
+    'user',
+    'name emailpl'
+  );
+});
