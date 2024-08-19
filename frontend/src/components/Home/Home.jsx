@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import { MouseScroll } from '@phosphor-icons/react';
 import Accordion from '../layout/Accordion/Accordion.jsx';
 import Loader from '../layout/Loader/Loader.jsx';
-import Product from './Product.jsx';
+import ProductCard from './ProductCard.jsx';
 import MetaData from '../layout/MetaData.jsx';
-import { getProduct } from '../../actions/productAction.js';
+import { clearErrors, getProduct } from '../../actions/productAction.js';
 import { useDispatch, useSelector } from 'react-redux';
 import { useAlert } from 'react-alert';
 
@@ -18,7 +18,8 @@ const Home = () => {
 
   useEffect(() => {
     if (error) {
-      return alert.error(error);
+      alert.error(error);
+      dispatch(clearErrors());
     }
     dispatch(getProduct());
     // console.log(getProduct())
@@ -60,7 +61,7 @@ const Home = () => {
               <div className='flex flex-wrap justify-center'>
                 {products &&
                   products.map(product => (
-                    <Product
+                    <ProductCard
                       key={product._id}
                       product={product}
                     />

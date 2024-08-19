@@ -3,6 +3,7 @@ import ReactStars from 'react-rating-stars-component';
 
 const ReviewCard = ({ review }) => {
   const options = {
+    className: "stars",
     edit: false,
     color: '#64748b',
     activeColor: '#22c55e',

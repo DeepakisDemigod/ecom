@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { getProductDetails } from '../../actions/productAction.js';
+import { clearErrors, getProductDetails } from '../../actions/productAction.js';
 import ReactStars from 'react-rating-stars-component';
 import ReviewCard from './ReviewCard.jsx';
 import Loader from '../layout/Loader/Loader.jsx';
+import { useAlert } from 'react-alert';
 
 const ProductDetails = () => {
   const dispatch = useDispatch();
+  const alert = useAlert();
   const { id } = useParams();
 
   const { product, loading, error } = useSelector(
@@ -15,15 +17,20 @@ const ProductDetails = () => {
   );
 
   useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(clearErrors());
+    }
     dispatch(getProductDetails(id));
-  }, [dispatch, id]);
+  }, [dispatch, id, error, alert]);
 
   const options = {
+    className: 'stars',
     edit: false,
     color: '#64748b',
     activeColor: '#22c55e',
     size: window.innerWidth < 600 ? 20 : 25,
-    value: product?.ratings || 0, // Add a fallback value to avoid errors
+    value: product?.ratings || 0,
     isHalf: true
   };
 

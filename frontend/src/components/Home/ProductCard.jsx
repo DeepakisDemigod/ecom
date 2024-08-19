@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import ReactStars from 'react-rating-stars-component';
 
-const Product = ({ product }) => {
+const ProductCard = ({ product }) => {
   const options = {
+    className: 'stars',
     edit: false,
     color: '#64748b',
     activeColor: '#22c55e',
@@ -13,10 +14,10 @@ const Product = ({ product }) => {
   };
   return (
     <Link
-      className='border border-zinc-600 mb-4 mr-4'
+      className=' flex border border-zinc-600 mb-4 mr-4'
       to={`product/${product._id}`}
     >
-      <div className='w-full h-64 max-w-xs mx-auto overflow-hidden'>
+      <div className='w-36 w-full  max-w-xs mx-auto overflow-hidden'>
         <img
           src={product.images[0].url}
           alt={product.name}
@@ -43,4 +44,4 @@ const Product = ({ product }) => {
   );
 };
 
-export default Product;
+export default ProductCard;
