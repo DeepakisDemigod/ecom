@@ -16,8 +16,40 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 
 // Get All Products
 
+/*-------- CHAT GPT ---------*/
+
 exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
   const resultPerPage = 8;
+
+  // Initialize ApiFeatures with base query and request query
+  const apiFeature = new ApiFeatures(Product.find(), req.query)
+    .search()
+    .filter();
+
+  // Calculate total count of filtered products
+  const filteredProductsCount = await apiFeature.query.clone().countDocuments();
+
+  // Apply pagination
+  apiFeature.pagination(resultPerPage);
+
+  // Execute final query with filters and pagination
+  const products = await apiFeature.query;
+
+  // Get total count of products in the database
+  const productsCount = await Product.countDocuments();
+
+  res.status(200).json({
+    success: true,
+    products,
+    productsCount,
+    resultPerPage,
+    filteredProductsCount
+  });
+});
+
+
+/*exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
+  //const resultPerPage = 8;
 
   const productsCount = await Product.countDocuments();
 
@@ -25,18 +57,23 @@ exports.getAllProducts = catchAsyncErrors(async (req, res, next) => {
     .search()
     .filter();
 
+  let products = await apiFeature.query;
+  let filteredProductsCount = products.length;
+
   apiFeature.pagination(resultPerPage);
 
-  const products = await apiFeature.query;
+  products = await apiFeature.query;
 
   console.log('Found products:', products);
 
   res.status(200).json({
     success: true,
     products,
-    productsCount
+    productsCount,
+    resultPerPage,
+    filteredProductsCount
   });
-});
+});*/
 
 /*
 exports.getAllProducts = catchAsyncErrors(async (req, res) => {
@@ -68,7 +105,6 @@ exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
     product
   });
 });
-
 
 // Update Product -- Admin
 
