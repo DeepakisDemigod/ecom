@@ -8,5 +8,8 @@ export default {
       }
     }
   },
+  daisyui: {
+    themes: ['sunset']
+  },
   plugins: [require('daisyui')]
 };

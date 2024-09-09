@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { MouseScroll } from '@phosphor-icons/react';
+import { ShoppingBag } from '@phosphor-icons/react';
 import Accordion from '../layout/Accordion/Accordion.jsx';
 import Loader from '../layout/Loader/Loader.jsx';
 import ProductCard from './ProductCard.jsx';
@@ -12,9 +12,7 @@ const Home = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
 
-  const { loading, error, products, productsCount } = useSelector(
-    state => state.products
-  );
+  const { loading, error, products } = useSelector(state => state.products);
 
   useEffect(() => {
     if (error) {
@@ -22,8 +20,9 @@ const Home = () => {
       dispatch(clearErrors());
     }
     dispatch(getProduct());
-    // console.log(getProduct())
   }, [dispatch, error, alert]);
+
+  console.log(products);
 
   return (
     <>
@@ -34,20 +33,17 @@ const Home = () => {
           <MetaData title='Home' />
           <div className='font-inter px-6'>
             <div className='flex flex-col items-center justify-start'>
-              <p className='text-5xl my-8 font-bold text-center'>
-                Games made <span className='text-green-500'>affordable</span> to
-                everyone
+              <p className='text-lg font-light my-8 text-center'>
+                games made{' '}
+                <span className='font-semibold text-green-500'>affordable</span>{' '}
+                to everyone, Shop now for exclusive deals on your favourite  games.
               </p>
-              <h1>
-                Amazing games for your PlayStation and XBox at affordable
-                prices, delivered to your doorstep
-              </h1>
               <br />
               <br />
-              <a href='#products'>
-                <button className='font-inter text-white btn-disabled flex bg-green-500 p-2 items-center justify-center  px-5'>
-                  <span>Scroll Down</span>
-                  <MouseScroll size={20} />
+              <a href='/products'>
+                <button className='rounded-3xl font-inter gap-1.5 text-white btn-disabled flex bg-green-500 p-2 items-center justify-center  px-5'>
+                  <ShoppingBag size={22} />
+                  <span>Shop Now</span>
                 </button>
               </a>
             </div>

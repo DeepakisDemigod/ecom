@@ -9,7 +9,7 @@ hr {
 
 * {
   color: white;
-  font-family: 'Quicksand', Sans-Serif;
+  font-family: 'Inter', Sans-Serif;
   scroll-behavior: smooth;
 }
 
@@ -18,22 +18,8 @@ hr {
   opacity: 1; /* Fully shown on mouse-over */
 }
 
-/* The slider handle (use -webkit- (Chrome, Opera, Safari, Edge) and -moz- (Firefox) to override default look) */
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none; /* Override default look */
-  appearance: none;
-  color: hotpink;
-  width: 2px; /* Set a specific slider handle width */
-  height: 2px; /* Slider handle height */
-  background: #04aa6d; /* Green background */
-  cursor: pointer; /* Cursor on hover */
-}
-
-.slider::-moz-range-thumb {
-  width: 2px; /* Set a specific slider handle width */
-  height: 2px; /* Slider handle height */
-  background: #04aa6d; /* Green background */
-  cursor: pointer; /* Cursor on hover */
+input[type="range"]::-webkit-slider-runnable-track {
+  background: #fff;
 }
 
 .pagination {

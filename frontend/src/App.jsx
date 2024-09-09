@@ -5,6 +5,7 @@ import Home from './components/Home/Home.jsx';
 import ProductDetails from './components/Product/ProductDetails.jsx';
 import Products from './components/Product/Products.jsx';
 import Search from './components/Product/Search.jsx';
+import LoginSignup from './components/user/LoginSignup.jsx'
 
 function App() {
   return (
@@ -27,7 +28,6 @@ function App() {
           element={<Products />}
         />
         <Route
-          
           path='/products/:keyword'
           element={<Products />}
         />
@@ -35,6 +35,11 @@ function App() {
           exact
           path='/search'
           element={<Search />}
+        />
+        <Route
+          exact
+          path='/login'
+          element={<LoginSignup />}
         />
       </Routes>
       <Footer />

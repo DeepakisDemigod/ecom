@@ -10,17 +10,30 @@ import {
 } from '../constants/productConstants.js';
 
 export const getProduct =
-  (keyword = '', currentPage = 1, price = [0, 25000], category) =>
+  (
+    keyword = '',
+    currentPage = 1,
+    price = [0, 25000],
+    category,
+    ratings = [0, 5]
+  ) =>
   async dispatch => {
     try {
       dispatch({
         type: ALL_PRODUCT_REQUEST
       });
 
-      let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}`;
+      let link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}`; /*`/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&ratings[gte]=${ratings}`*/
+
+      /* Some Products will not be lusted becuse the ratings is using the "ratings" key and not "rating" so thats why 
+      to fix delete previous products and create new 
+      */
+
+      console.log(link);
 
       if (category) {
-        link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}`;
+        link = `/api/v1/products?keyword=${keyword}&page=${currentPage}&price[gte]=${price[0]}&price[lte]=${price[1]}&category=${category}&ratings[gte]=${ratings}`;
+        console.log(link);
       }
 
       const { data } = await axios.get(link);

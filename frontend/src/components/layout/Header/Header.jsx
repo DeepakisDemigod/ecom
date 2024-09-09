@@ -1,8 +1,9 @@
 import React from 'react';
+import Logo from '../../../../public/logo.png';
 
 const Header = () => {
   return (
-    <div className='drawer'>
+    <div className='drawer sticky top-0'>
       <input
         id='my-drawer-3'
         type='checkbox'
@@ -37,7 +38,10 @@ const Header = () => {
               href='/'
               className='text-xl'
             >
-              BackInGame
+              <img
+                src={Logo}
+                alt='logo'
+              />
             </a>
           </div>
           <div className='z-[100] hidden flex-none lg:block'>
@@ -52,7 +56,7 @@ const Header = () => {
                 <a href='/contact'>Contact</a>
               </li>
               <li>
-                <a href='/about'>About</a>
+                <a href='/login'>Login</a>
               </li>
             </ul>
           </div>
@@ -167,7 +171,7 @@ const Header = () => {
             <a href='/contact'>Contact</a>
           </li>
           <li>
-            <a href='/about'>About</a>
+            <a href='/login'>Login</a>
           </li>
         </ul>
       </div>

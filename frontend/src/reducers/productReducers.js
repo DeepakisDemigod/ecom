@@ -16,6 +16,8 @@ export const productReducer = (state = { products: [] }, action) => {
         products: []
       };
     case ALL_PRODUCT_SUCCESS:
+      console.log('Products in reducer:', action.payload); // Debugging line
+      
       return {
         loading: false,
         products: action.payload.products,

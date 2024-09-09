@@ -3,7 +3,7 @@ import ReactStars from 'react-rating-stars-component';
 
 const ReviewCard = ({ review }) => {
   const options = {
-    className: "stars",
+    className: 'stars',
     edit: false,
     color: '#64748b',
     activeColor: '#22c55e',
@@ -13,17 +13,17 @@ const ReviewCard = ({ review }) => {
   };
 
   return (
-    <div className='bg-neutral rounded-lg pt-3 p-4 mb-2 w-[250px]'>
-      <div className='flex gap-2'>
-        <img src='https://eu.ui-avatars.com/api/?name=Deepak+Thapa&size=20' />
-        <p className='font-bold'>{review.name}</p>
+    <div className='bg-neutral   pt-3 p-4 mb-2 w-[300px]'>
+      <div className='flex gap-2 mx-3'>
+        <img src='https://eu.ui-avatars.com/api/?name=john+doe&size=20' />
+        <p className=''>{review.name}</p>
       </div>
-      <div className='mx-2'>
+      <div className='mx-4'>
         <div className='flex items-center gap-1'>
-          <span className='mt-1'>({review.rating})</span>
-          <ReactStars {...options} />
+          <ReactStars {...options} /> 
+          <span className='mt-1 text-xs text-zinc-400'>• {review.rating}</span>
         </div>
-        <span className='text-xs'>{review.comment}</span>
+        <span className='text-xs '>{review.comment}</span>
       </div>
     </div>
   );

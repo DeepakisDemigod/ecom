@@ -72,7 +72,7 @@ const Accordion = () => {
           <div className='collapse-content'>
             <p className='text-sm'>
               Let's make it real! Submit it in the feedback box and there's a
-              chance it will be in your habit tracker soon.
+              chance it will be in backingame soon.
             </p>
           </div>
         </div>
@@ -83,7 +83,7 @@ const Accordion = () => {
       <br />
 
       <div>
-        <div className='bg-base-200 rounded-md p-4 my-4 text-center'>
+        <div className='bg-base-200   p-4 my-4 text-center'>
           <h2 className='flex flex-col font-bold text-4xl'>
             <span>Feedback</span>
           </h2>
