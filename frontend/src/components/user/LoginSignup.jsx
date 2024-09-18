@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import Loader from '../layout/Loader/Loader.jsx';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { clearErrors, login } from '../../actions/userAction.js';
+import { clearErrors, login, register } from '../../actions/userAction.js';
 import { useAlert } from 'react-alert';
+import MetaData from '../layout/MetaData.jsx';
 
 const LoginSignup = () => {
   const dispatch = useDispatch();
@@ -18,7 +19,7 @@ const LoginSignup = () => {
   const [user, setUser] = useState({ name: '', email: '', password: '' });
   const { name, email, password } = user;
   const [avatar, setAvatar] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState('/logo.png');
+  const [avatarPreview, setAvatarPreview] = useState('/user.png');
 
   const loginTab = useRef(null);
   const registerTab = useRef(null);
@@ -39,6 +40,7 @@ const LoginSignup = () => {
     myForm.set('password', password);
     myForm.append('avatar', avatar);
     // Dispatch the register action here
+    dispatch(register(myForm));
   };
 
   const registerDataChange = e => {
@@ -88,6 +90,7 @@ const LoginSignup = () => {
         <Loader />
       ) : (
         <div className='flex items-start justify-center'>
+      <MetaData title='Sign In to start shopping' />
           <div className='overflow-hidden'>
             <div>
               <div className='flex justify-around'>
@@ -142,6 +145,20 @@ const LoginSignup = () => {
               encType='multipart/form-data'
               onSubmit={registerSubmit}
             >
+              <div className='text-center'>
+                <img
+                  className='bg-zinc-300 rounded '
+                  src={avatarPreview}
+                  alt='Avatar Preview'
+                />
+                <input
+                  className='file-input file-input-bordered w-full max-w-xs'
+                  type='file'
+                  name='avatar'
+                  accept='image/*'
+                  onChange={registerDataChange}
+                />
+              </div>
               <div>
                 <input
                   className='input input-bordered flex items-center gap-2'
@@ -175,19 +192,7 @@ const LoginSignup = () => {
                   required
                 />
               </div>
-              <div>
-                <img
-                  src={avatarPreview}
-                  alt='Avatar Preview'
-                />
-                <input
-                  className='file-input file-input-bordered w-full max-w-xs'
-                  type='file'
-                  name='avatar'
-                  accept='image/*'
-                  onChange={registerDataChange}
-                />
-              </div>
+
               <input
                 className='w-full mt-4 py-2 rounded bg-green-500 text-sm text-white'
                 value='Register'

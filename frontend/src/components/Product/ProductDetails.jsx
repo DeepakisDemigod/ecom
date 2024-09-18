@@ -61,7 +61,7 @@ const ProductDetails = () => {
                       />
                     ))}
                 </div>
-                <div className='flex-[0.5] card bg-base-100 w-auto shadow-xl m-0 p-0'>
+                <div className='flex-[0.5] card bg-dark w-auto shadow-xl m-0 p-0'>
                   <div className='card-body'>
                     <h2 className='card-title'>
                       <p className='font-bold text-3xl'>{product.name}</p>

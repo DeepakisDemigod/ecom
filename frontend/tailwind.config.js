@@ -5,9 +5,13 @@ export default {
     extend: {
       fontFamily: {
         inter: ['Inter', 'sans-serif']
-      }
+      },
+      colors: {
+    dark: "#141414"
+  },
     }
   },
+  
   daisyui: {
     themes: ['sunset']
   },

@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from '../../../../public/logo.png';
+import Logo from '/logo.png';
 
 const Header = () => {
   return (
@@ -126,7 +126,10 @@ const Header = () => {
               >
                 <div className='avatar placeholder'>
                   <div className='bg-green-700 text-neutral-content w-8 rounded-full'>
-                    <span className='text-xs'>DT</span>
+                    <img
+                      src='https://ui-avatars.com/api/?name=johndoe'
+                      alt='name'
+                    />
                   </div>
                 </div>
               </div>
