@@ -8,7 +8,6 @@ hr {
 }
 
 * {
-  color: white;
   font-family: 'Inter', Sans-Serif;
   scroll-behavior: smooth;
 }
@@ -18,7 +17,7 @@ hr {
   opacity: 1; /* Fully shown on mouse-over */
 }
 
-input[type="range"]::-webkit-slider-runnable-track {
+input[type='range']::-webkit-slider-runnable-track {
   background: #fff;
 }
 
@@ -28,4 +27,8 @@ input[type="range"]::-webkit-slider-runnable-track {
 
 .pagination * {
   padding: 6px 8px;
+}
+
+.ant-rate-star-zero .ant-rate-star-second {
+  color: lightgray !important; /* Custom background color for unfilled stars */
 }

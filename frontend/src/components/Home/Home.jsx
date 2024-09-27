@@ -1,74 +1,139 @@
-import React, { useEffect } from 'react';
-import { ShoppingBag } from '@phosphor-icons/react';
-import Accordion from '../layout/Accordion/Accordion.jsx';
-import Loader from '../layout/Loader/Loader.jsx';
-import ProductCard from './ProductCard.jsx';
-import MetaData from '../layout/MetaData.jsx';
-import { clearErrors, getProduct } from '../../actions/productAction.js';
+import React, { useEffect, useState } from 'react';
+import { ShoppingOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { useAlert } from 'react-alert';
+import { useNavigate, Link } from 'react-router-dom';
+import { Card, Button, Skeleton, Row, Col, Alert, Typography } from 'antd';
+import { clearErrors, getProduct } from '../../actions/productAction';
+
+const { Meta } = Card;
+const { Title, Paragraph } = Typography;
+
+const ProductCard = ({ product }) => (
+  <Card
+    hoverable
+    cover={
+      <img
+        alt={product.name}
+        src={product.images[0].url || '/api/placeholder/300/200'}
+        style={{ height: '150px', objectFit: 'cover' }}
+      />
+    }
+    style={{ height: '100%' }}
+  >
+    <Meta
+      title={<Typography.Text ellipsis>{product.name}</Typography.Text>}
+      description={
+        <Typography.Text type='secondary'>₹{product.price}</Typography.Text>
+      }
+    />
+    <Link to={`/product/${product._id}`}>
+      <Button
+        type='link'
+        block
+        className='mt-2'
+      >
+        View Details
+      </Button>
+    </Link>
+  </Card>
+);
 
 const Home = () => {
-  const alert = useAlert();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
   const { loading, error, products } = useSelector(state => state.products);
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
       dispatch(clearErrors());
     }
     dispatch(getProduct());
-  }, [dispatch, error, alert]);
+  }, [dispatch, error]);
 
-  console.log(products);
+  const handleShopNowClick = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate('/products');
+    }, 1500);
+  };
 
   return (
-    <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <MetaData title='Home' />
-          <div className='font-inter px-6'>
-            <div className='flex flex-col items-center justify-start'>
-              <p className='text-lg font-light my-8 text-center'>
-                games made{' '}
-                <span className='font-semibold text-green-500'>affordable</span>{' '}
-                to everyone, Shop now for exclusive deals on your favourite  games.
-              </p>
-              <br />
-              <br />
-              <a href='/products'>
-                <button className='rounded-3xl font-inter gap-1.5 text-white btn-disabled flex bg-green-500 p-2 items-center justify-center  px-5'>
-                  <ShoppingBag size={22} />
-                  <span>Shop Now</span>
-                </button>
-              </a>
-            </div>
-            <div>
-              <h2
-                className='text-4xl my-8 font-bold'
-                id='products'
-              >
-                Featured Products
-              </h2>
-              <div className='flex flex-wrap justify-center'>
-                {products &&
-                  products.map(product => (
-                    <ProductCard
-                      key={product._id}
-                      product={product}
-                    />
-                  ))}
-              </div>
-            </div>
-            <Accordion />
-          </div>
-        </>
+    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 16px' }}>
+      <div style={{ textAlign: 'center', marginBottom: 32 }}>
+        <Title level={2}>Welcome to Game Store</Title>
+        <Paragraph>
+          Games made <span style={{ color: 'royalblue' }}>affordable</span> to
+          everyone. Shop now for exclusive deals on your favorite games.
+        </Paragraph>
+        <Button
+          type='primary'
+          icon={<ShoppingOutlined />}
+          onClick={handleShopNowClick}
+          loading={isLoading}
+        >
+          {isLoading ? 'Loading...' : 'Shop Now'}
+        </Button>
+      </div>
+
+      {error && (
+        <Alert
+          message='Error'
+          description={error}
+          type='error'
+          showIcon
+          style={{ marginBottom: 24 }}
+        />
       )}
-    </>
+
+      <Title
+        level={3}
+        style={{ marginBottom: 16 }}
+      >
+        Featured Products
+      </Title>
+
+      <Row
+        className='mx-4'
+        gutter={[16, 16]}
+      >
+        {loading
+          ? [...Array(4)].map((_, index) => (
+              <Col
+                xs={24}
+                sm={12}
+                md={8}
+                lg={6}
+                key={index}
+              >
+                <Card style={{ width: '100%', height: '100%' }}>
+                  <Skeleton
+                    loading={true}
+                    active
+                    avatar
+                  >
+                    <Meta
+                      title='Loading...'
+                      description='Please wait...'
+                    />
+                  </Skeleton>
+                </Card>
+              </Col>
+            ))
+          : products?.map(product => (
+              <Col
+                xs={24}
+                sm={12}
+                md={8}
+                lg={6}
+                key={product._id}
+              >
+                <ProductCard product={product} />
+              </Col>
+            ))}
+      </Row>
+    </div>
   );
 };
 

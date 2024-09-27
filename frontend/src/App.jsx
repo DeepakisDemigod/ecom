@@ -6,6 +6,7 @@ import Home from './components/Home/Home.jsx';
 import ProductDetails from './components/Product/ProductDetails.jsx';
 import Products from './components/Product/Products.jsx';
 import Search from './components/Product/Search.jsx';
+import NotFound from './components/layout/NotFound.jsx'
 import LoginSignup from './components/user/LoginSignup.jsx';
 import store from './store.js';
 import { useSelector } from 'react-redux';
@@ -52,6 +53,10 @@ function App() {
           exact
           path='/login'
           element={<LoginSignup />}
+        />
+        <Route
+          path='/*'
+          element={<NotFound />}
         />
       </Routes>
       <Footer />

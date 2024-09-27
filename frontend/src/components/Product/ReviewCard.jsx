@@ -1,31 +1,42 @@
 import React from 'react';
-import ReactStars from 'react-rating-stars-component';
+import { Card, Avatar, Rate, Typography } from 'antd';
+import { UserOutlined } from '@ant-design/icons';
+
+const { Text, Paragraph } = Typography;
 
 const ReviewCard = ({ review }) => {
-  const options = {
-    className: 'stars',
-    edit: false,
-    color: '#64748b',
-    activeColor: '#22c55e',
-    size: window.innerWidth < 600 ? 20 : 25,
-    value: review?.rating || 0, // Add a fallback value to avoid errors
-    isHalf: true
-  };
-
   return (
-    <div className='bg-neutral   pt-3 p-4 mb-2 w-[300px]'>
-      <div className='flex gap-2 mx-3'>
-        <img src='https://eu.ui-avatars.com/api/?name=john+doe&size=20' />
-        <p className=''>{review.name}</p>
+    <Card
+      className="review-card"
+            style={{padding: '16px', width: '100%', maxWidth: '300px', marginBottom: '16px' }}
+    >
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+        <Avatar
+          size="small"
+          icon={<UserOutlined />}
+          src={review.avatar || undefined}
+          style={{ marginRight: '8px' }}
+        />
+        <Text strong>{review.name}</Text>
       </div>
-      <div className='mx-4'>
-        <div className='flex items-center gap-1'>
-          <ReactStars {...options} /> 
-          <span className='mt-1 text-xs text-zinc-400'>• {review.rating}</span>
-        </div>
-        <span className='text-xs '>{review.comment}</span>
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+        <Rate
+          allowHalf
+          defaultValue={review.rating}
+          disabled
+          style={{ fontSize: '14px', marginRight: '8px' }}
+        />
+        <Text type="secondary" style={{ fontSize: '12px' }}>
+          {review.rating.toFixed(1)}
+        </Text>
       </div>
-    </div>
+      <Paragraph
+        ellipsis={{ rows: 3, expandable: true, symbol: 'more' }}
+        style={{ fontSize: '14px', margin: 0 }}
+      >
+        {review.comment}
+      </Paragraph>
+    </Card>
   );
 };
 

@@ -1,9 +1,25 @@
 import React from 'react';
+import { LoadingOutlined } from '@ant-design/icons';
+import { Flex, Spin } from 'antd';
 
 const Loader = () => {
   return (
-    <div className="w-[100vw] h-[100vh] flex items-center justify-center">
-      <span className='loading loading-spinner text-green-500 loading-lg'></span>
+    <div className='w-[100vw] h-[70vh] flex items-center justify-center'>
+      <Flex
+        align='center'
+        gap='middle'
+      >
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 30
+              }}
+              spin
+            />
+          }
+        />
+      </Flex>
     </div>
   );
 };

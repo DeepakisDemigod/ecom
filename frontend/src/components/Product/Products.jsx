@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearErrors, getProduct } from '../../actions/productAction.js';
-import { useParams, Link } from 'react-router-dom'; // Ensure Link is imported
-import Loader from '../layout/Loader/Loader.jsx';
-import ProductCard from '../Home/ProductCard.jsx';
-import Pagination from 'react-js-pagination';
-import Slider from '@mui/material/Slider';
-import { useAlert } from 'react-alert';
+import { useParams, Link } from 'react-router-dom';
+import { Layout, Typography, Slider, Card, Row, Col, Tag, Empty, Pagination, Spin, Button, message } from 'antd';
+import { ShoppingOutlined, ClearOutlined } from '@ant-design/icons';
 import MetaData from '../layout/MetaData.jsx';
 
-const categories = ['grafics', 'game', 'phone', 'RRRRR'];
+const { Content } = Layout;
+const { Title, Text } = Typography;
+
+const categories = ['Graphics', 'Game', 'Phone', 'Accessories'];
 
 const Products = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
-
+  const [messageApi, contextHolder] = message.useMessage();
   const [currentPage, setCurrentPage] = useState(1);
   const [price, setPrice] = useState([0, 25000]);
   const [category, setCategory] = useState('');
@@ -31,133 +30,139 @@ const Products = () => {
 
   const { keyword } = useParams();
 
-  const setCurrentPageNo = e => {
-    setCurrentPage(e);
-  };
-
-  const priceHandler = (event, newPrice) => {
-    setPrice(newPrice);
-  };
-
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      messageApi.error(error);
       dispatch(clearErrors());
     }
     dispatch(getProduct(keyword, currentPage, price, category, ratings));
-  }, [dispatch, keyword, currentPage, price, category, ratings, error, alert]);
+  }, [dispatch, keyword, currentPage, price, category, ratings, error, messageApi]);
 
-  let count = filteredProductsCount;
+  const handlePriceChange = (value) => {
+    setPrice(value);
+  };
+
+  const handleRatingChange = (value) => {
+    setRatings(value);
+  };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const clearFilters = () => {
+    setPrice([0, 25000]);
+    setCategory('');
+    setRatings(0);
+    setCurrentPage(1);
+  };
 
   return (
-    <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <>
-          <MetaData title='Ecommerce Products' />
-          <div className='flex gap-12 flex-col md:flex-row m-4 sm:m-6 md:m-10 justify-between'>
-            <div className='p-4 w-full m-auto w-[30vmax] bg-[#212d3b] md:w-[10vmax] mb-4 md:mb-0'>
-              {products.length > 0 ? (
-                <>
-                  <div className='m-4'>
-                    <p>Price</p>
-                    <Slider
-                      className='slider m-auto'
-                      value={price}
-                      onChange={priceHandler}
-                      valueLabelDisplay='auto'
-                      aria-labelledby='range-slider'
-                      min={0}
-                      max={25000}
-                    />
-                    <p>Browse by</p>
-                    <ul className='flex mb-4 font-mono gap-0.5 px-1.5'>
-                      {categories.map(category => (
-                        <li
-                          className='text-xs font-semibold bg-green-600 rounded p-1 cursor-pointer'
-                          key={category}
-                          onClick={() => setCategory(category)}
-                        >
-                          {category}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <fieldset>
-                      <legend>Ratings Above</legend>
-                      <Slider
-                        className='m-auto'
-                        value={ratings}
-                        onChange={(e, newRating) => setRatings(newRating)}
-                        aria-labelledby='continuous-slider'
-                        valueLabelDisplay='auto'
-                        min={0}
-                        max={5}
-                      />
-                    </fieldset>
-                  </div>
-                </>
-              ) : (
-                <span className='text-sm text-zinc-400'>
-                  Try searching{' '}
-                  <a
-                    className='text-green-300 underline'
-                    href='http://localhost:5173/products/GTA'
-                  >
-                    gta
-                  </a>
-                </span>
-              )}
-            </div>
-            <h2
-              className='text-4xl text-center my-8 mx-2 font-bold'
-              id='products'
+    <Layout>
+      {contextHolder}
+      <MetaData title='Ecommerce Products' />
+      <Content style={{ padding: '0 50px', marginTop: 64 }}>
+        <Title level={2} style={{ textAlign: 'center', margin: '20px 0' }}>Products</Title>
+        
+        <Row gutter={[24, 24]}>
+          <Col xs={24} sm={24} md={6} lg={6}>
+            <Card 
+              title="Filters" 
+              style={{ marginBottom: 20 }}
+              extra={
+                <Button 
+                  icon={<ClearOutlined />} 
+                  onClick={clearFilters}
+                  type="link"
+                >
+                  Clear
+                </Button>
+              }
             >
-              Products
-            </h2>
-            <div className='flex flex-wrap justify-center w-full min-h-[40vh]'>
-              {products && products.length > 0 ? (
-                products.map(product => (
-                  <Link
-                    key={product._id}
-                    className='md:flex mb-4 mr-4 w-full sm:w-[50vmax] md:w-[50vmax] lg:w-1/4 p-2'
-                    to={`/product/${product._id}`} // <-- Updated here
-                  >
-                    <ProductCard
-                      key={product._id}
-                      product={product}
-                    />
-                  </Link>
-                ))
-              ) : (
-                <span className='text-zinc-400'>No products found</span>
-              )}
-            </div>
-          </div>
-          <div>
-            {resultPerPage < count && (
-              <div className='flex items-center justify-center mt-4'>
-                <Pagination
-                  activePage={currentPage}
-                  itemsCountPerPage={resultPerPage}
-                  totalItemsCount={productsCount}
-                  onChange={setCurrentPageNo}
-                  nextPageText='Next'
-                  prevPageText='Prev'
-                  firstPageText='1st'
-                  lastPageText='Last'
-                  itemClass='page-item'
-                  linkClass='page-link'
-                  activeClass='bg-green-600 font-bold text-white'
-                  activeLinkClass='pageLinkActive'
+              <div style={{ marginBottom: 20 }}>
+                <Text strong>Price Range</Text>
+                <Slider
+                  range
+                  min={0}
+                  max={25000}
+                  value={price}
+                  onChange={handlePriceChange}
                 />
               </div>
+              
+              <div style={{ marginBottom: 20 }}>
+                <Text strong>Categories</Text>
+                <div style={{ marginTop: 10 }}>
+                  {categories.map(cat => (
+                    <Tag
+                      key={cat}
+                      color={category === cat ? 'green' : 'default'}
+                      style={{ marginBottom: 5, cursor: 'pointer' }}
+                      onClick={() => setCategory(cat)}
+                    >
+                      {cat}
+                    </Tag>
+                  ))}
+                </div>
+              </div>
+              
+              <div>
+                <Text strong>Ratings Above</Text>
+                <Slider
+                  min={0}
+                  max={5}
+                  value={ratings}
+                  onChange={handleRatingChange}
+                />
+              </div>
+            </Card>
+          </Col>
+          
+          <Col xs={24} sm={24} md={18} lg={18}>
+            <Spin spinning={loading}>
+              {products && products.length > 0 ? (
+                <Row gutter={[16, 16]}>
+                  {products.map(product => (
+                    <Col xs={24} sm={12} md={8} lg={6} key={product._id}>
+                      <Link to={`/product/${product._id}`}>
+                        <Card
+                          hoverable
+                          cover={<img alt={product.name} src={product.images[0].url} style={{ height: 200, objectFit: 'cover' }} />}
+                          actions={[<ShoppingOutlined key="shop" />]}
+                        >
+                          <Card.Meta
+                            title={product.name}
+                            description={
+                              <>
+                                <Text strong>₹{product.price}</Text>
+                                <br />
+                                <Text type="secondary">Rating: {product.ratings} / 5</Text>
+                              </>
+                            }
+                          />
+                        </Card>
+                      </Link>
+                    </Col>
+                  ))}
+                </Row>
+              ) : (
+                <Empty description="No products found" />
+              )}
+            </Spin>
+            
+            {resultPerPage < filteredProductsCount && (
+              <Pagination
+                current={currentPage}
+                total={productsCount}
+                pageSize={resultPerPage}
+                onChange={handlePageChange}
+                style={{ marginTop: 20, textAlign: 'center' }}
+              />
             )}
-          </div>
-        </>
-      )}
-    </>
+          </Col>
+        </Row>
+      </Content>
+    </Layout>
   );
 };
 

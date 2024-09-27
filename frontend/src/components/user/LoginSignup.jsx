@@ -1,208 +1,151 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Loader from '../layout/Loader/Loader.jsx';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, login, register } from '../../actions/userAction.js';
-import { useAlert } from 'react-alert';
+import { Card, Tabs, Form, Input, Button, Upload, message, Spin } from 'antd';
+import { UserOutlined, LockOutlined, MailOutlined, PlusOutlined } from '@ant-design/icons';
+import Loader from '../layout/Loader/Loader.jsx';
 import MetaData from '../layout/MetaData.jsx';
+
+const { TabPane } = Tabs;
 
 const LoginSignup = () => {
   const dispatch = useDispatch();
-  const alert = useAlert();
   const navigate = useNavigate();
 
-  // Retrieve state from Redux store
   const { error, loading, isAuthenticated } = useSelector(state => state.user);
 
-  const [loginEmail, setLoginEmail] = useState('');
-  const [loginPassword, setLoginPassword] = useState('');
-  const [user, setUser] = useState({ name: '', email: '', password: '' });
-  const { name, email, password } = user;
   const [avatar, setAvatar] = useState(null);
-  const [avatarPreview, setAvatarPreview] = useState('/user.png');
+  const [avatarPreview, setAvatarPreview] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
-  const loginTab = useRef(null);
-  const registerTab = useRef(null);
-  const switcherTab = useRef(null);
-
-  const loginSubmit = e => {
-    e.preventDefault();
-    console.log('Login form submitted');
-    dispatch(login(loginEmail, loginPassword));
-  };
-
-  const registerSubmit = e => {
-    e.preventDefault();
-    console.log('Register form submitted');
-    const myForm = new FormData();
-    myForm.set('name', name);
-    myForm.set('email', email);
-    myForm.set('password', password);
-    myForm.append('avatar', avatar);
-    // Dispatch the register action here
-    dispatch(register(myForm));
-  };
-
-  const registerDataChange = e => {
-    if (e.target.name === 'avatar') {
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.readyState === 2) {
-          setAvatarPreview(reader.result);
-          setAvatar(e.target.files[0]); // Correctly set the file
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
-    } else {
-      setUser({ ...user, [e.target.name]: e.target.value });
-    }
-  };
+  const [loginForm] = Form.useForm();
+  const [registerForm] = Form.useForm();
 
   useEffect(() => {
     if (error) {
-      alert.error(error);
+      message.error(error);
       dispatch(clearErrors());
     }
 
     if (isAuthenticated) {
       navigate('/account');
     }
-  }, [dispatch, error, alert, navigate, isAuthenticated]);
+  }, [dispatch, error, navigate, isAuthenticated]);
 
-  const switchTabs = (e, tab) => {
-    if (tab === 'login') {
-      switcherTab.current.classList.add('translate-x-0');
-      switcherTab.current.classList.remove('translate-x-full');
-      registerTab.current.classList.add('hidden');
-      loginTab.current.classList.remove('hidden');
+  const handleLogin = (values) => {
+    dispatch(login(values.email, values.password));
+  };
+
+  const handleRegister = (values) => {
+    const myForm = new FormData();
+    myForm.set('name', values.name);
+    myForm.set('email', values.email);
+    myForm.set('password', values.password);
+    if (avatar) {
+      myForm.set('avatar', avatar);
     }
-    if (tab === 'register') {
-      switcherTab.current.classList.add('translate-x-full');
-      switcherTab.current.classList.remove('translate-x-0');
-      registerTab.current.classList.remove('hidden');
-      loginTab.current.classList.add('hidden');
+    dispatch(register(myForm));
+  };
+
+  const handleAvatarChange = (info) => {
+    if (info.file.status === 'uploading') {
+      setUploading(true);
+      return;
+    }
+    if (info.file.status === 'done') {
+      setUploading(false);
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.readyState === 2) {
+          setAvatarPreview(reader.result);
+          setAvatar(info.file.originFileObj);
+        }
+      };
+      reader.readAsDataURL(info.file.originFileObj);
+    } else if (info.file.status === 'error') {
+      setUploading(false);
+      message.error(`${info.file.name} file upload failed.`);
     }
   };
 
-  return (
-    <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div className='flex items-start justify-center'>
-      <MetaData title='Sign In to start shopping' />
-          <div className='overflow-hidden'>
-            <div>
-              <div className='flex justify-around'>
-                <p onClick={e => switchTabs(e, 'login')}>Login</p>
-                <p onClick={e => switchTabs(e, 'register')}>Register</p>
-              </div>
-              <button
-                className='bg-green-500 h-[2px] w-1/2 transform transition-transform duration-300'
-                ref={switcherTab}
-              ></button>
-            </div>
-            <form
-              className='flex flex-col items-start p-4'
-              ref={loginTab}
-              onSubmit={loginSubmit}
-            >
-              <div>
-                <input
-                  className='input input-bordered flex items-center gap-2'
-                  type='email'
-                  placeholder='Email'
-                  value={loginEmail}
-                  onChange={e => setLoginEmail(e.target.value)}
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  className='input input-bordered flex items-center gap-2'
-                  type='password'
-                  value={loginPassword}
-                  placeholder='Password'
-                  onChange={e => setLoginPassword(e.target.value)}
-                  required
-                />
-              </div>
-              <Link
-                className='mx-2 text-zinc-400 text-sm'
-                to='/password/forgot'
-              >
-                Forgot password?
-              </Link>
-              <input
-                className='w-full mt-4 py-2 rounded bg-green-500 text-sm text-white'
-                value='Login'
-                type='submit'
-              />
-            </form>
-            <form
-              className='flex flex-col items-start p-4 hidden'
-              ref={registerTab}
-              encType='multipart/form-data'
-              onSubmit={registerSubmit}
-            >
-              <div className='text-center'>
-                <img
-                  className='bg-zinc-300 rounded '
-                  src={avatarPreview}
-                  alt='Avatar Preview'
-                />
-                <input
-                  className='file-input file-input-bordered w-full max-w-xs'
-                  type='file'
-                  name='avatar'
-                  accept='image/*'
-                  onChange={registerDataChange}
-                />
-              </div>
-              <div>
-                <input
-                  className='input input-bordered flex items-center gap-2'
-                  type='text'
-                  name='name'
-                  placeholder='Name'
-                  value={name}
-                  onChange={registerDataChange}
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  className='input input-bordered flex items-center gap-2'
-                  type='email'
-                  name='email'
-                  placeholder='Email'
-                  value={email}
-                  onChange={registerDataChange}
-                  required
-                />
-              </div>
-              <div>
-                <input
-                  className='input input-bordered flex items-center gap-2'
-                  type='password'
-                  name='password'
-                  value={password}
-                  placeholder='Password'
-                  onChange={registerDataChange}
-                  required
-                />
-              </div>
+  const customUpload = async ({ onError, onSuccess, file }) => {
+    setTimeout(() => {
+      onSuccess("ok");
+    }, 2000); // Simulating a 2-second upload time
+  };
 
-              <input
-                className='w-full mt-4 py-2 rounded bg-green-500 text-sm text-white'
-                value='Register'
-                type='submit'
-              />
-            </form>
-          </div>
-        </div>
-      )}
-    </>
+  if (loading) return <Loader />;
+
+  return (
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '20px' }}>
+      <MetaData title="Sign In to start shopping" />
+      <Card style={{ width: '100%', maxWidth: '400px' }}>
+        <Tabs defaultActiveKey="1">
+          <TabPane tab="Login" key="1">
+            <Form form={loginForm} onFinish={handleLogin}>
+              <Form.Item name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
+                <Input prefix={<MailOutlined />} placeholder="Email" />
+              </Form.Item>
+              <Form.Item name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
+                <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+              </Form.Item>
+              <Form.Item>
+                <Link to="/password/forgot" style={{ float: 'right' }}>
+                  Forgot password?
+                </Link>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                  Login
+                </Button>
+              </Form.Item>
+            </Form>
+          </TabPane>
+          <TabPane tab="Register" key="2">
+            <Form form={registerForm} onFinish={handleRegister}>
+              <Form.Item>
+                <Upload
+                  name="avatar"
+                  listType="picture-circle"
+                  className="avatar-uploader"
+                  showUploadList={false}
+                  customRequest={customUpload}
+                  onChange={handleAvatarChange}
+                >
+                  {avatarPreview ? (
+                    <img src={avatarPreview} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                  ) : uploading ? (
+                    <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                      <Spin />
+                    </div>
+                  ) : (
+                    <div>
+                      <PlusOutlined />
+                      <div style={{ marginTop: 8 }}>Upload</div>
+                    </div>
+                  )}
+                </Upload>
+              </Form.Item>
+              <Form.Item name="name" rules={[{ required: true, message: 'Please input your name!' }]}>
+                <Input prefix={<UserOutlined />} placeholder="Name" />
+              </Form.Item>
+              <Form.Item name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
+                <Input prefix={<MailOutlined />} placeholder="Email" />
+              </Form.Item>
+              <Form.Item name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
+                <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                  Register
+                </Button>
+              </Form.Item>
+            </Form>
+          </TabPane>
+        </Tabs>
+      </Card>
+    </div>
   );
 };
 
