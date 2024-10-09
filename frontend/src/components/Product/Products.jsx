@@ -61,8 +61,8 @@ const Products = () => {
     <Layout>
       {contextHolder}
       <MetaData title='Ecommerce Products' />
-      <Content style={{ padding: '0 50px', marginTop: 64 }}>
-        <Title level={2} style={{ textAlign: 'center', margin: '20px 0' }}>Products</Title>
+      <Content style={{ padding: '0 50px', marginTop: 0 }}>
+        <Title level={2} style={{ textAlign: 'center', margin: '20px 0' }}>New Arivals</Title>
         
         <Row gutter={[24, 24]}>
           <Col xs={24} sm={24} md={6} lg={6}>

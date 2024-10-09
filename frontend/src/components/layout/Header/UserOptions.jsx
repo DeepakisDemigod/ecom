@@ -9,7 +9,7 @@ import {
 import { Avatar, Dropdown, message, Space } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-// import { logout } from './path-to-your-logout-action'; // Import your logout action
+import { logout } from '../../../actions/userAction.js'; // Import your logout action
 
 const UserOptions = ({ user }) => {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const UserOptions = ({ user }) => {
   };
 
   const logoutUser = () => {
-    // dispatch(logout());
+    dispatch(logout());
     message.success('Logout successful');
   };
 
@@ -74,6 +74,8 @@ const UserOptions = ({ user }) => {
     items,
     onClick: handleMenuClick
   };
+  
+  // console.log(user)
 
   return (
     <Space wrap>
@@ -81,7 +83,7 @@ const UserOptions = ({ user }) => {
         menu={menuProps}
         placement='bottomRight'
       >
-        <Avatar icon={<UserOutlined />} />
+        <Avatar src={<img src={user.avatar[0].url} alt={user.name}/>}  />
       </Dropdown>
     </Space>
   );

@@ -9,16 +9,18 @@ const cloudinary = require('cloudinary');
 // Register a user
 
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  
   if (!req.files || !req.files.avatar) {
-    return next(new ErrorHandler("Please upload an avatar", 400));
+    return next(new ErrorHandler('Please upload an avatar', 400));
   }
-  
-  const myCloud = await cloudinary.v2.uploader.upload(req.files.avatar.tempFilePath, {
-    folder: 'avatars',
-    width: 150,
-    crop: 'scale'
-  });
+
+  const myCloud = await cloudinary.v2.uploader.upload(
+    req.files.avatar.tempFilePath,
+    {
+      folder: 'avatars',
+      width: 150,
+      crop: 'scale'
+    }
+  );
 
   const { name, email, password } = req.body;
 
@@ -32,7 +34,7 @@ exports.registerUser = catchAsyncErrors(async (req, res, next) => {
     }
   });
   sendToken(user, 201, res);
-}); 
+});
 
 // login user
 
@@ -193,7 +195,23 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
     email: req.body.email
   };
 
-  // we will add cloudinary later
+  // cloudinary
+
+  /*if (req.body.avatar !== '') {
+    const user = await User.findById(req.user.id);
+
+    const imageId = user.avatar.public_id;
+    await cloudinary.v2.uploader.destroy(imageId);
+
+    const myCloud = await cloudinary.v2.uploader.upload(
+      req.files.avatar.tempFilePath,
+      {
+        folder: 'avatars',
+        width: 150,
+        crop: 'scale'
+      }
+    );
+  }*/
 
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,

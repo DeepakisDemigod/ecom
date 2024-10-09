@@ -3,7 +3,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearErrors, login, register } from '../../actions/userAction.js';
 import { Card, Tabs, Form, Input, Button, Upload, message, Spin } from 'antd';
-import { UserOutlined, LockOutlined, MailOutlined, PlusOutlined } from '@ant-design/icons';
+import {
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+  PlusOutlined
+} from '@ant-design/icons';
 import Loader from '../layout/Loader/Loader.jsx';
 import MetaData from '../layout/MetaData.jsx';
 
@@ -33,11 +38,11 @@ const LoginSignup = () => {
     }
   }, [dispatch, error, navigate, isAuthenticated]);
 
-  const handleLogin = (values) => {
+  const handleLogin = values => {
     dispatch(login(values.email, values.password));
   };
 
-  const handleRegister = (values) => {
+  const handleRegister = values => {
     const myForm = new FormData();
     myForm.set('name', values.name);
     myForm.set('email', values.email);
@@ -48,7 +53,7 @@ const LoginSignup = () => {
     dispatch(register(myForm));
   };
 
-  const handleAvatarChange = (info) => {
+  const handleAvatarChange = info => {
     if (info.file.status === 'uploading') {
       setUploading(true);
       return;
@@ -71,52 +76,112 @@ const LoginSignup = () => {
 
   const customUpload = async ({ onError, onSuccess, file }) => {
     setTimeout(() => {
-      onSuccess("ok");
+      onSuccess('ok');
     }, 2000); // Simulating a 2-second upload time
   };
 
   if (loading) return <Loader />;
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', padding: '20px' }}>
-      <MetaData title="Sign In to start shopping" />
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'start',
+        minHeight: '100vh',
+        padding: '20px'
+      }}
+    >
+      <MetaData title='Sign In to start shopping' />
       <Card style={{ width: '100%', maxWidth: '400px' }}>
-        <Tabs defaultActiveKey="1">
-          <TabPane tab="Login" key="1">
-            <Form form={loginForm} onFinish={handleLogin}>
-              <Form.Item name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
-                <Input prefix={<MailOutlined />} placeholder="Email" />
+        <Tabs defaultActiveKey='1'>
+          <TabPane
+            tab='Login'
+            key='1'
+          >
+            <Form
+              form={loginForm}
+              onFinish={handleLogin}
+            >
+              <Form.Item
+                name='email'
+                rules={[
+                  { required: true, message: 'Please input your email!' }
+                ]}
+              >
+                <Input
+                  prefix={<MailOutlined />}
+                  placeholder='Email'
+                />
               </Form.Item>
-              <Form.Item name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
-                <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+              <Form.Item
+                name='password'
+                rules={[
+                  { required: true, message: 'Please input your password!' }
+                ]}
+              >
+                <Input.Password
+                  prefix={<LockOutlined />}
+                  placeholder='Password'
+                />
               </Form.Item>
               <Form.Item>
-                <Link to="/password/forgot" style={{ float: 'right' }}>
+                <Link
+                  to='/password/forgot'
+                  style={{ float: 'right' }}
+                >
                   Forgot password?
                 </Link>
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                <Button
+                  type='primary'
+                  htmlType='submit'
+                  style={{ width: '100%' }}
+                >
                   Login
                 </Button>
               </Form.Item>
             </Form>
           </TabPane>
-          <TabPane tab="Register" key="2">
-            <Form form={registerForm} onFinish={handleRegister}>
+          <TabPane
+            tab='Register'
+            key='2'
+          >
+            <Form
+              form={registerForm}
+              onFinish={handleRegister}
+            >
               <Form.Item>
                 <Upload
-                  name="avatar"
-                  listType="picture-circle"
-                  className="avatar-uploader"
+                  name='avatar'
+                  listType='picture-circle'
+                  className='avatar-uploader'
                   showUploadList={false}
                   customRequest={customUpload}
                   onChange={handleAvatarChange}
                 >
                   {avatarPreview ? (
-                    <img src={avatarPreview} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }} />
+                    <img
+                      src={avatarPreview}
+                      alt='Avatar'
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        borderRadius: '50%'
+                      }}
+                    />
                   ) : uploading ? (
-                    <div style={{ width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                      }}
+                    >
                       <Spin />
                     </div>
                   ) : (
@@ -127,17 +192,43 @@ const LoginSignup = () => {
                   )}
                 </Upload>
               </Form.Item>
-              <Form.Item name="name" rules={[{ required: true, message: 'Please input your name!' }]}>
-                <Input prefix={<UserOutlined />} placeholder="Name" />
+              <Form.Item
+                name='name'
+                rules={[{ required: true, message: 'Please input your name!' }]}
+              >
+                <Input
+                  prefix={<UserOutlined />}
+                  placeholder='Name'
+                />
               </Form.Item>
-              <Form.Item name="email" rules={[{ required: true, message: 'Please input your email!' }]}>
-                <Input prefix={<MailOutlined />} placeholder="Email" />
+              <Form.Item
+                name='email'
+                rules={[
+                  { required: true, message: 'Please input your email!' }
+                ]}
+              >
+                <Input
+                  prefix={<MailOutlined />}
+                  placeholder='Email'
+                />
               </Form.Item>
-              <Form.Item name="password" rules={[{ required: true, message: 'Please input your password!' }]}>
-                <Input.Password prefix={<LockOutlined />} placeholder="Password" />
+              <Form.Item
+                name='password'
+                rules={[
+                  { required: true, message: 'Please input your password!' }
+                ]}
+              >
+                <Input.Password
+                  prefix={<LockOutlined />}
+                  placeholder='Password'
+                />
               </Form.Item>
               <Form.Item>
-                <Button type="primary" htmlType="submit" style={{ width: '100%' }}>
+                <Button
+                  type='primary'
+                  htmlType='submit'
+                  style={{ width: '100%' }}
+                >
                   Register
                 </Button>
               </Form.Item>

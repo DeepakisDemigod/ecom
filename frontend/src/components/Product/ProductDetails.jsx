@@ -13,7 +13,8 @@ import {
   Divider,
   Row,
   Col,
-  message
+  message,
+  Image
 } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
 import ReviewCard from './ReviewCard.jsx';
@@ -54,30 +55,47 @@ const ProductDetails = () => {
       <div style={{ padding: '24px', background: 'white', color: 'black' }}>
         <Card>
           <Row gutter={[24, 24]}>
-            <Col xs={24} md={12}>
-              <div style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}>
-                <Carousel autoplay>
-                  {product.images &&
-                    product.images.map((item, i) => (
-                      <div key={item.url}>
-                        <img
-                          src={item.url}
-                          alt={`${i} slide`}
-                          style={{
-                            width: '100%',
-                            height: 'auto',
-                            objectFit: 'cover'
-                          }}
-                        />
-                      </div>
-                    ))}
-                </Carousel>
+            <Col
+              xs={24}
+              md={12}
+            >
+              <div
+                style={{ width: '100%', maxWidth: '400px', margin: '0 auto' }}
+              >
+                <Image.PreviewGroup>
+                  <Carousel autoplay>
+                    {product.images &&
+                      product.images.map((item, i) => (
+                        <div key={item.url}>
+                          <Image
+                            src={item.url}
+                            alt={`${i} slide`}
+                            style={{
+                              width: '100%',
+                              height: 'auto',
+                              objectFit: 'cover'
+                            }}
+                          />
+                        </div>
+                      ))}
+                  </Carousel>
+                </Image.PreviewGroup>
               </div>
             </Col>
-            <Col xs={24} md={12}>
-              <Space direction='vertical' size='small' style={{ width: '100%' }}>
+            <Col
+              xs={24}
+              md={12}
+            >
+              <Space
+                direction='vertical'
+                size='small'
+                style={{ width: '100%' }}
+              >
                 <Title level={3}>{product.name}</Title>
-                <Text type='secondary' style={{ fontSize: '12px' }}>
+                <Text
+                  type='secondary'
+                  style={{ fontSize: '12px' }}
+                >
                   Product ID: {product._id}
                 </Text>
                 <Space>
@@ -87,12 +105,18 @@ const ProductDetails = () => {
                     defaultValue={product.ratings}
                     style={{ fontSize: '14px' }}
                   />
-                  <Text type='secondary' style={{ fontSize: '12px' }}>
+                  <Text
+                    type='secondary'
+                    style={{ fontSize: '12px' }}
+                  >
                     ({product.ratings}/5) • {product.numOfReviews}{' '}
                     {product.numOfReviews <= 1 ? 'review' : 'reviews'}
                   </Text>
                 </Space>
-                <Title level={4} style={{ margin: '8px 0' }}>
+                <Title
+                  level={4}
+                  style={{ margin: '8px 0' }}
+                >
                   {formattedPrice}
                 </Title>
                 <Text
@@ -103,7 +127,10 @@ const ProductDetails = () => {
                 >
                   {product.Stock < 1 ? 'Out of Stock' : 'In Stock'}
                 </Text>
-                <Space size='large' style={{ marginTop: '16px' }}>
+                <Space
+                  size='large'
+                  style={{ marginTop: '16px' }}
+                >
                   <Space.Compact>
                     <Button icon={<MinusOutlined />} />
                     <Input
@@ -112,13 +139,19 @@ const ProductDetails = () => {
                     />
                     <Button icon={<PlusOutlined />} />
                   </Space.Compact>
-                  <Button type='primary' style={{ borderColor: 'royalblue' }}>
+                  <Button
+                    type='primary'
+                    style={{ borderColor: 'royalblue' }}
+                  >
                     Add to Cart
                   </Button>
                 </Space>
                 <Divider />
                 <Title level={5}>Game Description</Title>
-                <Text type='secondary' style={{ fontSize: '12px' }}>
+                <Text
+                  type='secondary'
+                  style={{ fontSize: '12px' }}
+                >
                   {product.description}
                 </Text>
                 <Button
@@ -139,10 +172,16 @@ const ProductDetails = () => {
           </Title>
           {product.reviews && product.reviews.length > 0 ? (
             product.reviews.map(review => (
-              <ReviewCard key={review._id} review={review} />
+              <ReviewCard
+                key={review._id}
+                review={review}
+              />
             ))
           ) : (
-            <Text type='secondary' style={{ fontSize: '14px' }}>
+            <Text
+              type='secondary'
+              style={{ fontSize: '14px' }}
+            >
               No Reviews yet
             </Text>
           )}

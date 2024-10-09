@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ShoppingOutlined } from '@ant-design/icons';
+import { ShoppingOutlined, LockOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { Card, Button, Skeleton, Row, Col, Alert, Typography } from 'antd';
@@ -43,6 +43,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const { loading, error, products } = useSelector(state => state.products);
+  const { isAuthenticated } = useSelector(state => state.user);
 
   useEffect(() => {
     if (error) {
@@ -58,23 +59,46 @@ const Home = () => {
       navigate('/products');
     }, 1500);
   };
+  const handleSignInClick = () => {
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      navigate('/login');
+    }, 1500);
+  };
 
   return (
     <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 16px' }}>
       <div style={{ textAlign: 'center', marginBottom: 32 }}>
-        <Title level={2}>Welcome to Game Store</Title>
-        <Paragraph>
-          Games made <span style={{ color: 'royalblue' }}>affordable</span> to
-          everyone. Shop now for exclusive deals on your favorite games.
-        </Paragraph>
-        <Button
-          type='primary'
-          icon={<ShoppingOutlined />}
-          onClick={handleShopNowClick}
-          loading={isLoading}
-        >
-          {isLoading ? 'Loading...' : 'Shop Now'}
-        </Button>
+        <Title level={2} style={{textAlign: "left"}}>welcome to game store</Title>
+        {isAuthenticated ? (
+          <div>
+            <Paragraph style={{textAlign: "left"}}>
+              games made <span style={{ color: 'royalblue' }}>affordable</span>{' '}
+              to everyone. Shop now for exclusive deals on your favorite games.
+            </Paragraph>
+            <Button
+              type='primary'
+              icon={<ShoppingOutlined />}
+              onClick={handleShopNowClick}
+              loading={isLoading}
+            >
+              {isLoading ? 'Loading...' : 'Shop Now'}
+            </Button>
+          </div>
+        ) : (
+          <div>
+            <Paragraph>Login or Register to start shopping. </Paragraph>
+            <Button
+              type='primary'
+              icon={<LockOutlined />}
+              onClick={handleSignInClick}
+              loading={isLoading}
+            >
+              {isLoading ? 'Loading...' : 'Register or Login to Get Started'}
+            </Button>
+          </div>
+        )}
       </div>
 
       {error && (
