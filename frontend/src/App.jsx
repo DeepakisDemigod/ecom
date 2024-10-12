@@ -9,6 +9,7 @@ import Products from './components/Product/Products.jsx';
 import Search from './components/Product/Search.jsx';
 import LoginSignup from './components/user/LoginSignup.jsx';
 import UpdateProfile from './components/user/UpdateProfile.jsx';
+import UpdatePassword from './components/user/UpdatePassword.jsx';
 import Profile from './components/user/Profile.jsx';
 import NotFound from './components/layout/NotFound.jsx';
 import ProtectedRoute from './components/Route/ProtectedRoute.jsx';
@@ -64,6 +65,13 @@ function App() {
             exact
             path='/me/update'
             element={<UpdateProfile />}
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            exact
+            path='/password/update'
+            element={<UpdatePassword />}
           />
         </Route>
 
