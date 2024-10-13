@@ -5,6 +5,7 @@ import { Form, Input, Button, message, Typography, Row, Col } from 'antd';
 import { KeyOutlined, LockOutlined, UnlockOutlined } from '@ant-design/icons';
 import { UPDATE_PASSWORD_RESET } from '../../constants/userConstants.js';
 import { clearErrors, updatePassword } from '../../actions/userAction.js';
+import MetaData from '../layout/MetaData.jsx';
 
 const { Title } = Typography;
 
@@ -42,6 +43,9 @@ const UpdatePassword = () => {
   }, [dispatch, error, navigate, isUpdated]);
 
   return (
+    
+    <>
+      <MetaData title="Change Password" />
     <div
       style={{
         maxWidth: '600px',
@@ -143,6 +147,7 @@ const UpdatePassword = () => {
         </Row>
       </Form>
     </div>
+    </>
   );
 };
 

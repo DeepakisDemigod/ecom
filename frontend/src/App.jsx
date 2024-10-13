@@ -10,6 +10,8 @@ import Search from './components/Product/Search.jsx';
 import LoginSignup from './components/user/LoginSignup.jsx';
 import UpdateProfile from './components/user/UpdateProfile.jsx';
 import UpdatePassword from './components/user/UpdatePassword.jsx';
+import ForgotPassword from './components/user/ForgotPassword.jsx';
+import ResetPassword from './components/user/ResetPassword.jsx';
 import Profile from './components/user/Profile.jsx';
 import NotFound from './components/layout/NotFound.jsx';
 import ProtectedRoute from './components/Route/ProtectedRoute.jsx';
@@ -74,13 +76,21 @@ function App() {
             element={<UpdatePassword />}
           />
         </Route>
-
+        <Route
+          exact
+          path='/password/forgot'
+          element={<ForgotPassword />}
+        />
+        <Route
+          exact
+          path='/password/reset/:token'
+          element={<ResetPassword />}
+        />
         <Route
           path='*'
           element={<NotFound />}
         />
       </Routes>
-      <Footer />
     </Router>
   );
 }
