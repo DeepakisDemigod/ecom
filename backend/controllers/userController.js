@@ -83,41 +83,59 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   if (!user) {
     return next(new ErrorHandler('User not found', 404));
   }
-  console.log(user);
 
-  // get reset pwd token
+  // Get reset password token
   const resetToken = user.getResetPasswordToken();
+  await user.save({ validateBeforeSave: false });
 
-  await user.save({
-    validateBeforeSave: false
-  });
   {
     /*const resetPasswordUrl = `${req.protocol}://${req.get(
     'host'
-  )}/api/v1/password/reset/${resetToken}`;*/
+  )}/password/reset/${resetToken}`;*/
   }
   const resetPasswordUrl = `http://localhost:5173/password/reset/${resetToken}`;
-  console.log(resetPasswordUrl);
-  const message = `Your password reset token is tempp:- \n\n ${resetPasswordUrl} \n\n if you have not requested this email then ignore`;
-  console.log(message);
+
+  const message = `
+    <h1>Password Reset Request</h1>
+    <p>Hello ${user.name},</p>
+    <p>You have requested to reset your password. Please click the link below to proceed:</p>
+    <a href="${resetPasswordUrl}">
+      <button style="margin-left: 5px; border-radius: 3px; background-color: royalblue; color: white; padding: 8px 14px; border: none; cursor: pointer;">
+        Reset Password
+      </button>
+    </a>
+    <p style="font-size: 9px; opacity: 0.6;">If you did not request this password reset, please ignore this email.</p>
+    <p>Thank you,</p>
+    <p>The Ecom Team</p>
+  `;
+
   try {
+    console.log('Attempting to send email to:', user.email);
+    console.log('Email content:', message);
+
     await sendEmail({
       email: user.email,
-      subject: `Ecom Password recovery`,
+      subject: 'Ecom Password Recovery',
       message
     });
+
+    console.log('Email sent successfully');
 
     res.status(200).json({
       success: true,
       message: `Email sent to ${user.email} successfully`
     });
   } catch (error) {
+    console.error('Error sending email:', error);
+
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
-    await user.save({
-      validateBeforeSave: false
-    });
-    return next(new ErrorHandler(error.message, 500));
+
+    await user.save({ validateBeforeSave: false });
+
+    return next(
+      new ErrorHandler(`Email could not be sent. Error: ${error.message}`, 500)
+    );
   }
 });
 
