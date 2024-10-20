@@ -1,4 +1,5 @@
 import React from 'react';
+
 import {
   UserOutlined,
   ShoppingCartOutlined,
@@ -74,7 +75,7 @@ const UserOptions = ({ user }) => {
     items,
     onClick: handleMenuClick
   };
-  
+
   // console.log(user)
 
   return (
@@ -83,7 +84,14 @@ const UserOptions = ({ user }) => {
         menu={menuProps}
         placement='bottomRight'
       >
-        <Avatar src={<img src={user.avatar[0].url} alt={user.name}/>}  />
+        <Avatar
+          src={
+            <img
+              src={`https://ui-avatars.com/api/?name=${user.name}`}
+              alt={user.name}
+            />
+          }
+        />
       </Dropdown>
     </Space>
   );

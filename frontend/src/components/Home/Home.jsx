@@ -68,14 +68,35 @@ const Home = () => {
   };
 
   return (
-    <div style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 16px' }}>
-      <div style={{ textAlign: 'center', marginBottom: 32 }}>
-        <Title level={2} style={{textAlign: "left"}}>welcome to game store</Title>
+    <div
+      style={{
+        maxWidth: 1200,
+        margin: '0 auto',
+        padding: '24px 16px'
+      }}
+    >
+      <div
+        style={{
+          backgroundImage: "url('./bg.png')",
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          padding: '50px 20px',
+          marginBottom: 32,
+          opacity: 0.99
+        }}
+      >
+        <Title
+          level={2}
+          style={{ color: '#fff', textAlign: 'left' , fontWeight: "bold"}}
+        >
+          welcome to game store
+        </Title>
         {isAuthenticated ? (
           <div>
-            <Paragraph style={{textAlign: "left"}}>
-              games made <span style={{ color: 'royalblue' }}>affordable</span>{' '}
-              to everyone. Shop now for exclusive deals on your favorite games.
+            <Paragraph style={{ color: '#fff' }}>
+              games made <span style={{ color: 'cyan' }}>affordable</span> to
+              everyone. Shop now for exclusive deals on your favorite games.
             </Paragraph>
             <Button
               type='primary'
@@ -88,7 +109,9 @@ const Home = () => {
           </div>
         ) : (
           <div>
-            <Paragraph>Login or Register to start shopping. </Paragraph>
+            <Paragraph style={{ color: '#fff' }}>
+              Login or Register to start shopping.{' '}
+            </Paragraph>
             <Button
               type='primary'
               icon={<LockOutlined />}
@@ -111,7 +134,7 @@ const Home = () => {
         />
       )}
 
-      <Title
+      {/*    <Title
         level={3}
         style={{ marginBottom: 16 }}
       >
@@ -156,7 +179,7 @@ const Home = () => {
                 <ProductCard product={product} />
               </Col>
             ))}
-      </Row>
+      </Row>  */}
     </div>
   );
 };

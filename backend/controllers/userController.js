@@ -91,11 +91,14 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   await user.save({
     validateBeforeSave: false
   });
-  const resetPasswordUrl = `${req.protocol}://${req.get(
+  {
+    /*const resetPasswordUrl = `${req.protocol}://${req.get(
     'host'
-  )}/api/v1/password/reset/${resetToken}`;
+  )}/api/v1/password/reset/${resetToken}`;*/
+  }
+  const resetPasswordUrl = `http://localhost:5173/password/reset/${resetToken}`;
   console.log(resetPasswordUrl);
-  const message = `Your password reset token is :- \n\n ${resetPasswordUrl} \n\n if you have not requested this email then ignore`;
+  const message = `Your password reset token is tempp:- \n\n ${resetPasswordUrl} \n\n if you have not requested this email then ignore`;
   console.log(message);
   try {
     await sendEmail({
