@@ -24,7 +24,7 @@ const order = require('./routes/orderRoute.js');
 
 app.use((req, res, next) => {
   const now = new Date().toISOString();
-  console.log(`${req.method} ${req.url} [${now}]`);
+  console.log(`➜ ${req.method} ${req.url} [${now}]`);
   next();
 });
 

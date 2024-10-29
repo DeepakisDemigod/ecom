@@ -16,6 +16,7 @@ import Profile from './components/user/Profile.jsx';
 import NotFound from './components/layout/NotFound.jsx';
 import ProtectedRoute from './components/Route/ProtectedRoute.jsx';
 import UserOptions from './components/layout/Header/UserOptions.jsx';
+import Cart from './components/cart/Cart.jsx';
 import { loadUser } from './actions/userAction.js';
 import store from './store.js';
 
@@ -86,6 +87,12 @@ function App() {
           path='/password/reset/:token'
           element={<ResetPassword />}
         />
+        <Route
+          exact
+          path='/cart'
+          element={<Cart />}
+        />
+
         <Route
           path='*'
           element={<NotFound />}

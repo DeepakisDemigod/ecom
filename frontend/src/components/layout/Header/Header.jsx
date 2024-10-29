@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import {
   Layout,
   Menu,
@@ -36,6 +36,16 @@ const Header = () => {
   const { isAuthenticated, user } = useSelector(state => state.user);
   const [drawerVisible, setDrawerVisible] = useState(false);
   const navigate = useNavigate();
+
+  const { cartItems } = useSelector(state => state.cart);
+
+  // Calculate total price
+  const grossTotal = useMemo(() => {
+    return cartItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0
+    );
+  }, [cartItems]);
 
   useEffect(() => {
     dispatch(loadUser());
@@ -95,22 +105,27 @@ const Header = () => {
           key: '1',
           label: (
             <div>
-              <Text strong>8 Items</Text>
+              <Text>
+                <span>Quantity: </span>
+                {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'}
+              </Text>
               <br />
-              <Text type='secondary'>Subtotal: $999</Text>
+              <Text type='secondary'>Subtotal: ₹. {grossTotal}</Text>
             </div>
           )
         },
         {
           key: '2',
           label: (
-            <Button
-              type='primary'
-              block
-              icon={<ShoppingCartOutlined />}
-            >
-              View Cart
-            </Button>
+            <a href='/cart'>
+              <Button
+                type='primary'
+                block
+                icon={<ShoppingCartOutlined />}
+              >
+                View Cart
+              </Button>
+            </a>
           )
         }
       ]}
@@ -170,7 +185,7 @@ const Header = () => {
                 strong
                 className='ml-2 text-lg hidden sm:inline'
               >
-                BackInGame
+                <img src='/logo.png' />
               </Text>
             </Link>
           </Space>

@@ -10,14 +10,7 @@ const Loader = () => {
         gap='middle'
       >
         <Spin
-          indicator={
-            <LoadingOutlined
-              style={{
-                fontSize: 30
-              }}
-              spin
-            />
-          }
+    size="large"
         />
       </Flex>
     </div>

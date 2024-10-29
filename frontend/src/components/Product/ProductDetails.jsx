@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { clearErrors, getProductDetails } from '../../actions/productAction.js';
+import { addItemsToCart } from '../../actions/cartAction';
 import {
   Carousel,
   Card,
@@ -16,21 +17,52 @@ import {
   message,
   Image
 } from 'antd';
-import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import {
+  PlusOutlined,
+  MinusOutlined,
+  CommentOutlined,
+  ShoppingCartOutlined
+} from '@ant-design/icons';
 import ReviewCard from './ReviewCard.jsx';
 import Loader from '../layout/Loader/Loader.jsx';
 import MetaData from '../layout/MetaData.jsx';
 
 const { Title, Text } = Typography;
 
-const ProductDetails = () => {
+const ProductDetails = ( ) => {
   const dispatch = useDispatch();
   const { id } = useParams();
+  const [quantity, setQuantity] = useState(1);
   const [messageApi, contextHolder] = message.useMessage();
 
   const { product, loading, error } = useSelector(
     state => state.productDetails
   );
+
+  const handleQuantityChange = value => {
+    if (value <= product.Stock && value >= 1) {
+      setQuantity(value);
+    }
+  };
+
+  const increaseQuantity = () => {
+    if (quantity < product.Stock) {
+      setQuantity(prev => prev + 1);
+    }
+  };
+
+  const decreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(prev => prev - 1);
+    }
+  };
+
+  const addCartHandler = () => {
+    dispatch(addItemsToCart(id, quantity));
+    message.success({
+      content: 'Item Added to Cart'
+    });
+  };
 
   useEffect(() => {
     if (error) {
@@ -132,14 +164,21 @@ const ProductDetails = () => {
                   style={{ marginTop: '16px' }}
                 >
                   <Space.Compact>
-                    <Button icon={<MinusOutlined />} />
+                    <Button
+                      onClick={decreaseQuantity}
+                      icon={<MinusOutlined />}
+                    />
                     <Input
                       style={{ width: '50px', textAlign: 'center' }}
-                      defaultValue='1'
+                      value={quantity}
                     />
-                    <Button icon={<PlusOutlined />} />
+                    <Button
+                      onClick={increaseQuantity}
+                      icon={<PlusOutlined />}
+                    />
                   </Space.Compact>
                   <Button
+                    onClick={addCartHandler}
                     type='primary'
                     style={{ borderColor: 'royalblue' }}
                   >
@@ -155,6 +194,7 @@ const ProductDetails = () => {
                   {product.description}
                 </Text>
                 <Button
+                  icon={<CommentOutlined />}
                   type='primary'
                   style={{
                     borderColor: '#1777ff',

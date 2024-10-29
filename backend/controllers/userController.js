@@ -95,7 +95,7 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   }
   const resetPasswordUrl = `http://localhost:5173/password/reset/${resetToken}`;
 
-  const message = `
+  {/*const message = `
     <h1>Password Reset Request</h1>
     <p>Hello ${user.name},</p>
     <p>You have requested to reset your password. Please click the link below to proceed:</p>
@@ -107,7 +107,78 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     <p style="font-size: 9px; opacity: 0.6;">If you did not request this password reset, please ignore this email.</p>
     <p>Thank you,</p>
     <p>The Ecom Team</p>
-  `;
+  `;*/}
+  
+  const message = `
+  <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Reset Request</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+        .header {
+            background-color: #4169e1;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4169e1;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="margin: 0;">Password Reset Request</h1>
+        </div>
+        <div class="content">
+            <p>Hello ${user.name},</p>
+            <p>You have requested to reset your password. Please click the button below to proceed:</p>
+            <p style="text-align: center;">
+                <a href="${resetPasswordUrl}" class="button">Reset Password</a>
+            </p>
+            <p style="font-size: 12px; color: #666;">If you did not request this password reset, please ignore this email.</p>
+            <p>Thank you,<br>Your Support Team</p>
+        </div>
+        <div class="footer">
+            <p>&copy; 2024 Your Company Name. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>`
 
   try {
     console.log('Attempting to send email to:', user.email);
