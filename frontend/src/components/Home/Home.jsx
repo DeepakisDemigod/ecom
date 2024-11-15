@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { ShoppingOutlined, LockOutlined } from '@ant-design/icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
-import { Card, Button, Skeleton, Row, Col, Alert, Typography } from 'antd';
-import { clearErrors, getProduct } from '../../actions/productAction';
+import { useEffect, useState } from "react";
+import { ShoppingOutlined, LockOutlined } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, Link } from "react-router-dom";
+import { Card, Button, Skeleton, Row, Col, Alert, Typography } from "antd";
+import { clearErrors, getProduct } from "../../actions/productAction";
 
 const { Meta } = Card;
 const { Title, Paragraph } = Typography;
@@ -14,24 +14,20 @@ const ProductCard = ({ product }) => (
     cover={
       <img
         alt={product.name}
-        src={product.images[0].url || '/api/placeholder/300/200'}
-        style={{ height: '150px', objectFit: 'cover' }}
+        src={product.images[0].url || "/api/placeholder/300/200"}
+        style={{ height: "150px", objectFit: "cover" }}
       />
     }
-    style={{ height: '100%' }}
+    style={{ height: "100%" }}
   >
     <Meta
       title={<Typography.Text ellipsis>{product.name}</Typography.Text>}
       description={
-        <Typography.Text type='secondary'>₹{product.price}</Typography.Text>
+        <Typography.Text type="secondary">₹{product.price}</Typography.Text>
       }
     />
     <Link to={`/product/${product._id}`}>
-      <Button
-        type='link'
-        block
-        className='mt-2'
-      >
+      <Button type="link" block className="mt-2">
         View Details
       </Button>
     </Link>
@@ -42,8 +38,8 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  const { loading, error, products } = useSelector(state => state.products);
-  const { isAuthenticated } = useSelector(state => state.user);
+  const { loading, error, products } = useSelector((state) => state.products);
+  const { isAuthenticated } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (error) {
@@ -56,14 +52,14 @@ const Home = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      navigate('/products');
+      navigate("/products");
     }, 1500);
   };
   const handleSignInClick = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      navigate('/login');
+      navigate("/login");
     }, 1500);
   };
 
@@ -71,54 +67,54 @@ const Home = () => {
     <div
       style={{
         maxWidth: 1200,
-        margin: '0 auto',
-        padding: '24px 16px'
+        margin: "0 auto",
+        padding: "24px 16px",
       }}
     >
       <div
         style={{
           backgroundImage: "url('./bg.png')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundRepeat: 'no-repeat',
-          padding: '50px 20px',
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          padding: "50px 20px",
           marginBottom: 32,
-          opacity: 0.99
+          opacity: 0.99,
         }}
       >
         <Title
           level={2}
-          style={{ color: '#fff', textAlign: 'left' , fontWeight: "bold"}}
+          style={{ color: "#fff", textAlign: "left", fontWeight: "bold" }}
         >
-          welcome to game store
+          welcome back in game
         </Title>
         {isAuthenticated ? (
           <div>
-            <Paragraph style={{ color: '#fff' }}>
-              games made <span style={{ color: 'cyan' }}>affordable</span> to
+            <Paragraph style={{ color: "#fff" }}>
+              games made <span style={{ color: "cyan" }}>affordable</span> to
               everyone. Shop now for exclusive deals on your favorite games.
             </Paragraph>
             <Button
-              type='primary'
+              type="primary"
               icon={<ShoppingOutlined />}
               onClick={handleShopNowClick}
               loading={isLoading}
             >
-              {isLoading ? 'Loading...' : 'Shop Now'}
+              {isLoading ? "Loading..." : "Shop Now"}
             </Button>
           </div>
         ) : (
           <div>
-            <Paragraph style={{ color: '#fff' }}>
-              Login or Register to start shopping.{' '}
+            <Paragraph style={{ color: "#fff" }}>
+              Login or Register to start shopping.{" "}
             </Paragraph>
             <Button
-              type='primary'
+              type="primary"
               icon={<LockOutlined />}
               onClick={handleSignInClick}
               loading={isLoading}
             >
-              {isLoading ? 'Loading...' : 'Register or Login to Get Started'}
+              {isLoading ? "Loading..." : "Register or Login to Get Started"}
             </Button>
           </div>
         )}
@@ -126,9 +122,9 @@ const Home = () => {
 
       {error && (
         <Alert
-          message='Error'
+          message="Error"
           description={error}
-          type='error'
+          type="error"
           showIcon
           style={{ marginBottom: 24 }}
         />

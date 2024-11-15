@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+
 hr {
   border: 0.5px solid #999;
   margin: 20px;

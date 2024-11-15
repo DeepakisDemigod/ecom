@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Header from './components/layout/Header/Header.jsx';
@@ -19,12 +19,22 @@ import UserOptions from './components/layout/Header/UserOptions.jsx';
 import Cart from './components/cart/Cart.jsx';
 import { loadUser } from './actions/userAction.js';
 import store from './store.js';
+import Shipping from './components/cart/Shipping.jsx';
+import ConfirmOrder from './components/cart/ConfirmOrder.jsx';
+import Payment from './components/cart/Payment.jsx';
+import axios from 'axios';
 
 function App() {
   const { isAuthenticated, user } = useSelector(state => state.user);
+  const [stripeApiKey, setStripeApiKey] = useState('');
 
+  async function getStripeApiKey() {
+    const { data } = await axios.get('/api/v1/stripeapikey');
+    setStripeApiKey(data.stripeApiKey);
+  }
   useEffect(() => {
     store.dispatch(loadUser());
+    getStripeApiKey();
   }, []);
 
   return (
@@ -92,6 +102,27 @@ function App() {
           path='/cart'
           element={<Cart />}
         />
+        <Route element={<ProtectedRoute />}>
+          <Route
+            exact
+            path='/shipping'
+            element={<Shipping />}
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            exact
+            path='/order/confirm'
+            element={<ConfirmOrder />}
+          />
+        </Route>
+        <Route element={<ProtectedRoute />}>
+          <Route
+            exact
+            path='/process/payment'
+            element={<Payment />}
+          />
+        </Route>
 
         <Route
           path='*'

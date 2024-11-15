@@ -1,6 +1,6 @@
-import { ADD_TO_CART, REMOVE_CART_ITEM } from '../constants/cartConstants.js';
+import { ADD_TO_CART, REMOVE_CART_ITEM ,SAVE_SHIPPING_INFO} from '../constants/cartConstants.js';
 
-export const cartReducer = (state = { cartItems: [] }, action) => {
+export const cartReducer = (state = { cartItems: [], shppingInfo: {}}, action) => {
   // Ensure cartItems is null-safe
   const cartItems = state.cartItems.filter(item => item !== null);
 
@@ -40,6 +40,12 @@ export const cartReducer = (state = { cartItems: [] }, action) => {
       return {
         ...state,
         cartItems: state.cartItems.filter(i => i.product !== action.payload)
+      };
+
+    case SAVE_SHIPPING_INFO:
+      return {
+        ...state,
+        shippingInfo: action.payload
       };
 
     default:

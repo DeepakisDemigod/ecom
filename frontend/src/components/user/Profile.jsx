@@ -68,7 +68,7 @@ const Profile = () => {
                 cover={
                   <div style={{ padding: '24px', textAlign: 'center' }}>
                     <Avatar
-                      size={128}
+                      size={60}
                       src={
                         user.avatar && user.avatar[0]
                           ? user.avatar[0].url

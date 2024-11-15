@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo } from "react";
 import {
   Card,
   Button,
@@ -9,27 +9,29 @@ import {
   Row,
   Col,
   Layout,
-  Empty
-} from 'antd';
+  Empty,
+} from "antd";
 import {
   MinusOutlined,
   PlusOutlined,
   ShoppingCartOutlined,
-  DeleteOutlined
-} from '@ant-design/icons';
-import CartItemCard from './CartItemCard.jsx';
-import { useSelector, useDispatch } from 'react-redux';
+  DeleteOutlined,
+} from "@ant-design/icons";
+import CartItemCard from "./CartItemCard.jsx";
+import { useSelector, useDispatch } from "react-redux";
 import {
   addItemsToCart,
-  removeItemsFromCart
-} from '../../actions/cartAction.js';
+  removeItemsFromCart,
+} from "../../actions/cartAction.js";
+import { useNavigate } from "react-router-dom";
 
 const { Title, Text } = Typography;
 const { Content } = Layout;
 
 const Cart = () => {
   const dispatch = useDispatch();
-  const { cartItems } = useSelector(state => state.cart);
+  const navigate = useNavigate();
+  const { cartItems } = useSelector((state) => state.cart);
 
   // Calculate total price
   const grossTotal = useMemo(() => {
@@ -38,39 +40,6 @@ const Cart = () => {
       0
     );
   }, [cartItems]);
-
-  // Cart item handlers
-  const handleIncrement = itemId => {
-    dispatch({
-      type: 'UPDATE_QUANTITY',
-      payload: {
-        id: itemId,
-        change: 1
-      }
-    });
-  };
-
-  const handleDecrement = itemId => {
-    dispatch({
-      type: 'UPDATE_QUANTITY',
-      payload: {
-        id: itemId,
-        change: -1
-      }
-    });
-  };
-
-  const handleDelete = itemId => {
-    dispatch({
-      type: 'REMOVE_FROM_CART',
-      payload: itemId
-    });
-  };
-
-  const handleCheckout = () => {
-    // Implement checkout logic
-    console.log('Proceeding to checkout with items:', cartItems);
-  };
 
   const increaseQuantity = (id, quantity, stock) => {
     const newQty = quantity + 1;
@@ -88,16 +57,26 @@ const Cart = () => {
     dispatch(addItemsToCart(id, newQty));
   };
 
+  const deleteCartItems = (id) => {
+    dispatch(removeItemsFromCart(id));
+  };
+
+  const handleCheckout = () => {
+    navigate("/login?redirect=/shipping");
+  };
+
   if (!cartItems?.length) {
     return (
       <Layout>
-        <Content style={{ padding: '24px', maxWidth: 1200, margin: '0 auto' }}>
+        <Content style={{ padding: "24px", maxWidth: 1200, margin: "0 auto" }}>
           <Card>
             <Empty
-              description='Your cart is empty'
+              description="Your cart is empty"
               image={Empty.PRESENTED_IMAGE_SIMPLE}
             >
-              <a href="/products"><Button type='primary'>Go Shopping</Button></a>
+              <a href="/products">
+                <Button type="primary">Go Shopping</Button>
+              </a>
             </Empty>
           </Card>
         </Content>
@@ -105,75 +84,55 @@ const Cart = () => {
     );
   }
 
-  const deleteCartItems = id => {
-    dispatch(removeItemsFromCart(id));
-  };
-  
-  console.log(cartItems.length)
-
   return (
     <Layout>
-      <Content style={{ padding: '24px', maxWidth: 1200, margin: '0 auto' }}>
+      <Content style={{ padding: "24px", maxWidth: 1200, margin: "0 auto" }}>
         <Card>
-          <Title
-            level={2}
-            style={{ marginBottom: 24 }}
-          >
+          <Title level={2} style={{ marginBottom: 24, textAlign: "center" }}>
             <Space>
               <ShoppingCartOutlined />
               Shopping Cart ({cartItems.length} items)
             </Space>
           </Title>
 
-          {/* Header */}
+          {/* Header for Desktop */}
           <Row
             style={{
               fontWeight: 600,
               marginBottom: 16,
-              display: { xs: 'none', md: 'flex' }
+              display: "none",
+              md: "flex",
+              alignItems: "center",
             }}
+            gutter={[16, 16]}
           >
             <Col span={12}>Product</Col>
             <Col span={6}>Quantity</Col>
-            <Col span={6}>Subtotal</Col>
+            <Col span={6} style={{ textAlign: "right" }}>
+              Subtotal
+            </Col>
           </Row>
 
           <Divider />
 
           {/* Cart Items */}
-          {cartItems.map(item => (
-            <div
-              key={item.product}
-              style={{ marginBottom: 24 }}
-            >
-              <Row
-                gutter={[0, 24]}
-                align='middle'
-              >
-                <Col
-                  xs={24}
-                  md={12}
-                >
-                  <CartItemCard
-                    item={item}
-                    deleteCartItems={deleteCartItems}
-                  />
+          {cartItems.map((item) => (
+            <div key={item.product} style={{ marginBottom: 24 }}>
+              <Row gutter={[16, 16]} align="middle">
+                <Col xs={24} md={12}>
+                  <CartItemCard item={item} deleteCartItems={deleteCartItems} />
                 </Col>
 
-                <Col
-                  xs={24}
-                  md={6}
-                >
+                <Col xs={24} md={6}>
                   <Space>
                     <Button
                       icon={<MinusOutlined />}
-                      shape='circle'
+                      shape="circle"
                       onClick={() =>
                         decreaseQuantity(item.product, item.quantity)
                       }
                       disabled={item.quantity <= 1}
                     />
-
                     <InputNumber
                       min={1}
                       max={99}
@@ -181,10 +140,9 @@ const Cart = () => {
                       readOnly
                       style={{ width: 60 }}
                     />
-
                     <Button
                       icon={<PlusOutlined />}
-                      shape='circle'
+                      shape="circle"
                       onClick={() =>
                         increaseQuantity(
                           item.product,
@@ -194,25 +152,17 @@ const Cart = () => {
                       }
                       disabled={item.quantity >= 99}
                     />
-
                     <Button
-                    onClick={() => deleteCartItems(item.product)}
                       icon={<DeleteOutlined />}
-                      type='text'
+                      type="text"
                       danger
-                           />
+                      onClick={() => deleteCartItems(item.product)}
+                    />
                   </Space>
                 </Col>
 
-                <Col
-                  xs={24}
-                  md={6}
-                  style={{ textAlign: 'right' }}
-                >
-                  <Text
-                    strong
-                    style={{ fontSize: 16 }}
-                  >
+                <Col xs={24} md={6} style={{ textAlign: "right" }}>
+                  <Text strong style={{ fontSize: 16 }}>
                     ₹ {item.price * item.quantity}
                   </Text>
                 </Col>
@@ -223,32 +173,19 @@ const Cart = () => {
           <Divider />
 
           {/* Cart Summary */}
-          <Row justify='end'>
-            <Col
-              xs={24}
-              md={8}
-            >
-              <Card style={{ backgroundColor: '#f5f5f5' }}>
-                <Space
-                  direction='vertical'
-                  style={{ width: '100%' }}
-                >
-                  <Row
-                    justify='space-between'
-                    align='middle'
-                  >
+          <Row justify="end">
+            <Col xs={24} md={8}>
+              <Card style={{ backgroundColor: "#f5f5f5" }}>
+                <Space direction="vertical" style={{ width: "100%" }}>
+                  <Row justify="space-between" align="middle">
                     <Text strong>Gross Total:</Text>
-                    <Text
-                      strong
-                      style={{ fontSize: 20 }}
-                    >
+                    <Text strong style={{ fontSize: 20 }}>
                       ₹ {grossTotal}
                     </Text>
                   </Row>
-
                   <Button
-                    type='primary'
-                    size='large'
+                    type="primary"
+                    size="large"
                     block
                     onClick={handleCheckout}
                   >

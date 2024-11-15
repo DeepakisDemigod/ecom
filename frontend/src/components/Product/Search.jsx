@@ -1,6 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
-import { Input, Button, Typography, Form, Card, Space, Tag } from 'antd';
+import {
+  Input,
+  Button,
+  Typography,
+  Form,
+  Card,
+  Space,
+  Tag,
+  Divider
+} from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import MetaData from '../layout/MetaData.jsx';
 
@@ -20,7 +29,7 @@ const Search = () => {
 
   const suggestedProducts = [
     'gta',
-    'residence evil',
+    'resident evil',
     'zoo tycoon',
     'ghost of tsushima',
     'nvidia rtx3090'
@@ -35,12 +44,27 @@ const Search = () => {
           justifyContent: 'center',
           alignItems: 'center',
           minHeight: '60vh',
-          padding: '20px'
+          padding: '20px',
+          backgroundColor: '#f5f5f5'
         }}
       >
-        <Card style={{ width: '100%', maxWidth: '400px' }}>
-          <Form onFinish={searchSubmitHandler}>
-            <Title level={4}>Search for a Product</Title>
+        <Card
+          style={{
+            width: '100%',
+            maxWidth: 480,
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
+          }}
+        >
+          <Title
+            level={4}
+            style={{ textAlign: 'center', marginBottom: 16 }}
+          >
+            Search for a Product
+          </Title>
+          <Form
+            onFinish={searchSubmitHandler}
+            layout='vertical'
+          >
             <Form.Item
               name='keyword'
               rules={[
@@ -51,14 +75,8 @@ const Search = () => {
                 placeholder='Search a product...'
                 prefix={<SearchOutlined />}
                 onChange={e => setKeyword(e.target.value)}
-                list='products'
               />
             </Form.Item>
-            {/*<datalist id="products">
-            {suggestedProducts.map((product) => (
-              <option key={product} value={product} />
-            ))}
-          </datalist>*/}
             <Form.Item>
               <Button
                 type='primary'
@@ -70,12 +88,12 @@ const Search = () => {
               </Button>
             </Form.Item>
           </Form>
+          <Divider />
           <div>
-            <Paragraph>Suggested:</Paragraph>
-            <Space
-              size={[0, 8]}
-              wrap
-            >
+            <Paragraph style={{ marginBottom: 8, fontWeight: 'bold' }}>
+              Suggested:
+            </Paragraph>
+            <Space wrap>
               {suggestedProducts.map(product => (
                 <Tag
                   key={product}
